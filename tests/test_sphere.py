@@ -35,10 +35,3 @@ class TestSphere(unittest.TestCase):
     @unpack
     def test_intersections(self, trajectory, shape, expected):
         np.testing.assert_array_equal(shape.intersect(trajectory), expected)
-
-    @data(
-        (Sphere(0, 0, 0, 10), [3, 20, 10])
-    )
-    @unpack
-    def test_to_mesh(self, shape, expected):  # TODO, mesh is huge - function will be changed later on - most likely
-        np.testing.assert_array_equal(shape.to_mesh().shape, expected)

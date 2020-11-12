@@ -16,14 +16,6 @@ class Sphere(Shape):
         dist = np.linalg.norm(self.center - trajectory.data, axis=1)
         return dist <= self.radius
 
-    def to_mesh(self):
-        u, v = np.mgrid[0:2 * np.pi:20j, 0:np.pi:10j]
-        x = self.center[0] + self.radius * np.cos(u) * np.sin(v)
-        y = self.center[1] + self.radius * np.sin(u) * np.sin(v)
-        z = self.center[2] + self.radius * np.cos(v)
-
-        return np.array((x, y, z), dtype=float)
-
 
 class Cuboid(Shape):
     def __init__(self, x0: float, y0: float, z0: float, x1: float, y1: float, z1: float):
@@ -52,26 +44,3 @@ class Cuboid(Shape):
         return np.logical_and.reduce((u_p1 <= uO, uO <= u_p2,
                                       v_p1 <= vO, vO <= v_p3,
                                       w_p1 <= wO, wO <= w_p4))
-
-    def to_mesh(self):
-        p1 = self.p1
-        p2 = self.p2
-        p3 = self.p3
-        p4 = self.p4
-
-        X = [[p1[0], p2[0], p2[0], p1[0], p1[0]],
-             [p1[0], p2[0], p2[0], p1[0], p1[0]],
-             [p1[0], p2[0], p2[0], p1[0], p1[0]],
-             [p1[0], p2[0], p2[0], p1[0], p1[0]]]
-
-        Y = [[p1[1], p1[1], p3[1], p3[1], p1[1]],
-             [p1[1], p1[1], p3[1], p3[1], p1[1]],
-             [p1[1], p1[1], p1[1], p1[1], p1[1]],
-             [p3[1], p3[1], p3[1], p3[1], p3[1]]]
-
-        Z = [[p1[2], p1[2], p1[2], p1[2], p1[2]],
-             [p4[2], p4[2], p4[2], p4[2], p4[2]],
-             [p1[2], p1[2], p4[2], p4[2], p1[2]],
-             [p1[2], p1[2], p4[2], p4[2], p1[2]]]
-
-        return np.array((X, Y, Z), dtype=float)

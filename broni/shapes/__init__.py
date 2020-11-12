@@ -1,2 +1,3 @@
 class Shape:
     pass
+
