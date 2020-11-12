@@ -39,25 +39,3 @@ class TestCuboid(unittest.TestCase):
     @unpack
     def test_intersections(self, trajectory, shape, expected):
         np.testing.assert_array_equal(shape.intersect(trajectory), expected)
-
-    @data(
-        (Cuboid(0, 0, 0, 10, 10, 10),
-         np.array([[[0., 10., 10., 0., 0.],
-                    [0., 10., 10., 0., 0.],
-                    [0., 10., 10., 0., 0.],
-                    [0., 10., 10., 0., 0.]],
-
-                   [[0., 0., 10., 10., 0.],
-                    [0., 0., 10., 10., 0.],
-                    [0., 0., 0., 0., 0.],
-                    [10., 10., 10., 10., 10.]],
-
-                   [[0., 0., 0., 0., 0.],
-                    [10., 10., 10., 10., 10.],
-                    [0., 0., 10., 10., 0.],
-                    [0., 0., 10., 10., 0.]]]),
-         )
-    )
-    @unpack
-    def test_to_mesh(self, shape, expected):
-        np.testing.assert_array_equal(shape.to_mesh(), expected)
