@@ -17,8 +17,8 @@ setup_requirements = ['pytest-runner', ]
 test_requirements = ['pytest>=3', ]
 
 setup(
-    author="Patrick BOETTCHER",
-    author_email='patrick.boettcher@posteo.de',
+    author="Patrick Boettcher",
+    author_email='p@yai.se',
     python_requires='>=3.5',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
@@ -31,7 +31,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Orbit Intersection",
+    description="Orbit Intersections",
     install_requires=requirements,
     license="GNU General Public License v3",
     long_description=readme + '\n\n' + history,
@@ -42,7 +42,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/pboettch/broni',
+    url='https://github.com/SciQLop/broni',
     version='0.1.0',
     zip_safe=False,
 )
