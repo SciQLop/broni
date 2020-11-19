@@ -9,12 +9,6 @@ from broni.shapes.primitives import Cuboid
 
 @ddt
 class TestCuboid(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_invalid(self):
         with self.assertRaises(ValueError):
             assert Cuboid(0, 0, 0, 0, 0, 0)
