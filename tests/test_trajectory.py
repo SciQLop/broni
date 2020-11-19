@@ -11,7 +11,7 @@ from broni.shapes.primitives import Cuboid, Sphere
 
 @ddt
 class TestTrajectory(unittest.TestCase):
-    def test_invalid(self):
+    def test_invalid_ctor_args_raise_exceptions(self):
         with self.assertRaises(ValueError):
             assert broni.Trajectory(
                 np.array([[0, 0], [0, 0]], dtype=float),
@@ -45,7 +45,7 @@ class TestTrajectory(unittest.TestCase):
          [Cuboid(0, 0, 0, 2, 2, 2), Sphere(1.5, 1.5, 1.5 , 1)], np.array([[2, 2], [5, 5]])),  # overlapping sphere and cuboid, logical_and
     )
     @unpack
-    def test_trajectory(self, trajectory, objects, expected):
+    def test_trajectory_intervals_with_primitive_objects(self, trajectory, objects, expected):
         np.testing.assert_array_equal(
             broni.intervals(
                 broni.Trajectory(trajectory, np.arange(0, len(trajectory)), coordinate_system="GSE"),

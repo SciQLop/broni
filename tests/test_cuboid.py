@@ -9,7 +9,7 @@ from broni.shapes.primitives import Cuboid
 
 @ddt
 class TestCuboid(unittest.TestCase):
-    def test_invalid(self):
+    def test_invalid_ctor_args_raise_exceptions(self):
         with self.assertRaises(ValueError):
             assert Cuboid(0, 0, 0, 0, 0, 0)
 
@@ -31,5 +31,5 @@ class TestCuboid(unittest.TestCase):
          np.array([False, True, False, True, False], dtype=bool)),  # Cuboid points "inverted"
     )
     @unpack
-    def test_intersections(self, trajectory, shape, expected):
+    def test_cuboid_intersections(self, trajectory, shape, expected):
         np.testing.assert_array_equal(shape.intersect(trajectory), expected)
