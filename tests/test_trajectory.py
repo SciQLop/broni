@@ -11,12 +11,6 @@ from broni.shapes.primitives import Cuboid, Sphere
 
 @ddt
 class TestTrajectory(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_invalid(self):
         with self.assertRaises(ValueError):
             assert broni.Trajectory(

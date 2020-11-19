@@ -9,12 +9,6 @@ from broni.shapes.primitives import Sphere
 
 @ddt
 class TestSphere(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_invalid(self):
         with self.assertRaises(ValueError):
             assert Sphere(0, 0, 0, 0)  # zero radius
