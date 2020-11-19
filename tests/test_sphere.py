@@ -9,7 +9,7 @@ from broni.shapes.primitives import Sphere
 
 @ddt
 class TestSphere(unittest.TestCase):
-    def test_invalid(self):
+    def test_invalid_ctor_args_raise_exceptions(self):
         with self.assertRaises(ValueError):
             assert Sphere(0, 0, 0, 0)  # zero radius
 
@@ -27,5 +27,5 @@ class TestSphere(unittest.TestCase):
          np.array([False, False, False])),  # just outside
     )
     @unpack
-    def test_intersections(self, trajectory, shape, expected):
+    def test_sphere_intersections(self, trajectory, shape, expected):
         np.testing.assert_array_equal(shape.intersect(trajectory), expected)
