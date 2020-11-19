@@ -46,16 +46,17 @@ def sphere_mesh(sphere):
 
 
 if __name__ == '__main__':
+    coord_sys = "gse"
+
     ssc = sscweb.SscWeb()
     sv = ssc.get_orbit(product="mms1",
                        start_time="2020-10-10",
                        stop_time="2020-10-24",
-                       coordinate_system="gse")
-    df = sv.to_dataframe()
+                       coordinate_system=coord_sys)
 
-    orbit = broni.Trajectory(df.values[::2, 0:3],
-                             df.index[::2],
-                             coordinate_system="gse")
+    orbit = broni.Trajectory(sv.data[::2, 0:3],
+                             sv.time[::2],
+                             coordinate_system=coord_sys)
 
     # sphere = Sphere(30000, 30000, 30000, 15000)
     # intervals = broni.intervals(orbit, sphere)
@@ -64,7 +65,7 @@ if __name__ == '__main__':
     #                25000, 25000, 25000)
     # intervals += broni.intervals(orbit, cuboid)
 
-    sphere = Sphere(30000, 30000, 30000, 25000)
+    sphere = Sphere(30000, 30000, 30000, 20000)
     cuboid = Cuboid(10000, 10000, 10000,
                     25000, 25000, 25000)
     intervals = broni.intervals(orbit, [sphere, cuboid])
@@ -77,16 +78,15 @@ if __name__ == '__main__':
               i[0], '-', i[1])
 
     # intersection points
-    slice1 = variable.merge([sv[interval[0]:interval[1]] for interval in intervals]).data
+    slice1 = variable.merge([sv[interval[0]:interval[1]] for interval in intervals])
 
     fig = plt.figure()
     ax = fig.gca(projection='3d')
 
-    ax.plot(df.values[:, 0], df.values[:, 1], df.values[:, 2], color='r')
-    try:
+    ax.plot(sv.data[:, 0], sv.data[:, 1], sv.data[:, 2], color='r')
+    if slice1:
+        slice1 = slice1.data
         ax.scatter(slice1[:, 0], slice1[:, 1], slice1[:, 2], color='g')
-    except:
-        pass
 
     ax.set_xlim3d(5000, 32000)
     ax.set_ylim3d(5000, 32000)
