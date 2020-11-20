@@ -13,7 +13,7 @@ class Sphere(Shape):
         self.radius = r
 
     def intersect(self, trajectory: Trajectory):
-        dist = np.linalg.norm(self.center - trajectory.data, axis=1)
+        dist = np.linalg.norm(self.center - trajectory.cartesian(), axis=1)
         return dist <= self.radius
 
 
@@ -28,13 +28,10 @@ class Cuboid(Shape):
             raise ValueError("p0 is equal to p1, a Cuboid of zero volume is not supported.")
 
     def intersect(self, trajectory: Trajectory):
-        if len(trajectory.data) == 0:
-            return np.array([])
-
         def f(b):
             v = self.p1 - b
             vp1, vb = sorted([np.dot(v, p) for p in (self.p1, b)])
-            o = np.dot(trajectory.data, v)
+            o = np.dot(trajectory.cartesian(), v)
             return vp1, vb, o
 
         u_p1, u_p2, uO = f(self.p2)

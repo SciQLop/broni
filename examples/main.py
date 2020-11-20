@@ -50,12 +50,12 @@ if __name__ == '__main__':
     sv = ssc.get_orbit(product="mms1",
                        start_time="2020-10-10",
                        stop_time="2020-10-24",
-                       coordinate_systems="GSE")
+                       coordinate_system="gse")
     df = sv.to_dataframe()
 
     orbit = broni.Trajectory(df.values[::2, 0:3],
                              df.index[::2],
-                             coordinate_system="GSE")
+                             coordinate_system="gse")
 
     # sphere = Sphere(30000, 30000, 30000, 15000)
     # intervals = broni.intervals(orbit, sphere)
