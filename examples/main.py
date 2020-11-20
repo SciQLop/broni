@@ -3,6 +3,8 @@
 from broni.shapes.primitives import Cuboid, Sphere
 import broni
 
+from astropy.units import km
+
 from spwc import sscweb
 from spwc.common import variable
 
@@ -13,10 +15,10 @@ import numpy as np
 
 
 def cuboid_mesh(cuboid):
-    p1 = cuboid.p1
-    p2 = cuboid.p2
-    p3 = cuboid.p3
-    p4 = cuboid.p4
+    p1 = cuboid.p1.value
+    p2 = cuboid.p2.value
+    p3 = cuboid.p3.value
+    p4 = cuboid.p4.value
 
     X = [[p1[0], p2[0], p2[0], p1[0], p1[0]],
          [p1[0], p2[0], p2[0], p1[0], p1[0]],
@@ -54,7 +56,9 @@ if __name__ == '__main__':
                        stop_time="2020-10-24",
                        coordinate_system=coord_sys)
 
-    orbit = broni.Trajectory(sv.data[::2, 0:3],
+    orbit = broni.Trajectory(sv.data[::2, 0] * km,
+                             sv.data[::2, 1] * km,
+                             sv.data[::2, 2] * km,
                              sv.time[::2],
                              coordinate_system=coord_sys)
 
@@ -65,9 +69,9 @@ if __name__ == '__main__':
     #                25000, 25000, 25000)
     # intervals += broni.intervals(orbit, cuboid)
 
-    sphere = Sphere(30000, 30000, 30000, 20000)
-    cuboid = Cuboid(10000, 10000, 10000,
-                    25000, 25000, 25000)
+    sphere = Sphere(30000 * km, 30000 * km, 30000 * km, 20000 * km)
+    cuboid = Cuboid(10000 * km, 10000 * km, 10000 * km,
+                    25000 * km, 25000 * km, 25000 * km)
     intervals = broni.intervals(orbit, [sphere, cuboid])
 
     print('found', len(intervals), 'intervals')

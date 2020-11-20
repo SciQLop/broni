@@ -11,3 +11,4 @@ ddt
 pytest==4.6.5
 pytest-runner==5.1
 spwc>=0.7.0
+matplotlib
