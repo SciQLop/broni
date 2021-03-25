@@ -71,16 +71,12 @@ class Trajectory:
 
     @property
     def cartesian(self):
-        return np.array((self._x,
-                         self._y,
-                         self._z)).T * self._x.unit
+        return np.array((self.x,
+                         self.y,
+                         self.z)).T * self.x.unit
 
     def _spherical(self):
         if self._r is None:
-            # xy = self._x ** 2 + self._y ** 2
-            # self._r = np.sqrt(xy + self._z ** 2)
-            # self._lon = np.arctan2(np.sqrt(xy), self._z)
-            # self._lat = np.arctan2(self._y, self._x)
             self._r, self._lat, self._lon = cartesian_to_spherical(self._x, self._y, self._z)
 
 
