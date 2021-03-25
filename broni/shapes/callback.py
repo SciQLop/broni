@@ -4,6 +4,7 @@ from .. import Trajectory
 from functools import partial
 import numpy as np
 from astropy.units.quantity import Quantity
+from astropy.constants import R_earth
 
 from typing import Callable
 
@@ -43,7 +44,7 @@ class SphericalBoundary(Shape):
         self._cb = partial(callback, **kwargs)
 
     def intersect(self, trajectory: Trajectory):
-        distances = trajectory.r - self._cb(trajectory.lon, trajectory.lat)[0]
+        distances = trajectory.r - self._cb(trajectory.lon, trajectory.lat)[0] * R_earth
 
         return (distances >= self._lower if self._lower is not None else True) & \
                (distances <= self._upper if self._upper is not None else True)
