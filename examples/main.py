@@ -52,8 +52,8 @@ if __name__ == '__main__':
 
     ssc = sscweb.SscWeb()
     sv = ssc.get_orbit(product="mms1",
-                       start_time="2020-10-10",
-                       stop_time="2020-10-24",
+                       start_time="2021-02-20",
+                       stop_time="2021-03-11",
                        coordinate_system=coord_sys)
 
     orbit = broni.Trajectory(sv.data[::2, 0] * km,
@@ -69,10 +69,10 @@ if __name__ == '__main__':
     #                25000, 25000, 25000)
     # intervals += broni.intervals(orbit, cuboid)
 
-    sphere = Sphere(30000 * km, 30000 * km, 30000 * km, 20000 * km)
+    sphere = Sphere(30000 * km, -30000 * km, 30000 * km, 20000 * km)
     cuboid = Cuboid(10000 * km, 10000 * km, 10000 * km,
                     25000 * km, 25000 * km, 25000 * km)
-    intervals = broni.intervals(orbit, [sphere, cuboid])
+    intervals = broni.intervals(orbit, [sphere])
 
     print('found', len(intervals), 'intervals')
     for i in sorted(intervals):

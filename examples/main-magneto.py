@@ -66,7 +66,7 @@ if __name__ == '__main__':
                              np.arange(0, len(X)),
                              coordinate_system=coord_sys)
 
-    boundary_model = SphericalBoundary(mp_formisano1979, 0 * R_earth, 1 * R_earth)
+    boundary_model = SphericalBoundary(mp_formisano1979, 0 * R_earth, 1 * R_earth, scale=R_earth)
     # boundary_model = Sheath(mp_formisano1979, bs_formisano1979)
 
     # boundary_model = SphericalBoundary(SphereModel(100000 * km), -1 * R_earth, 0)
@@ -87,10 +87,10 @@ if __name__ == '__main__':
     th, ph = np.meshgrid(th_1d, ph_1d, indexing='ij')
 
     if boundary_model.__class__ == SphericalBoundary:
-        x, y, z = boundary_model._cb.func(th, ph)
+        x, y, z = boundary_model._cb.func(th, ph) * R_earth.to('km')
     else:
-        x, y, z = boundary_model.inner_model._cb.func(th, ph)
-        xb, yb, zb = boundary_model.outer_model._cb.func(th, ph)
+        x, y, z = boundary_model.inner_model._cb.func(th, ph) * R_earth.to('km')
+        xb, yb, zb = boundary_model.outer_model._cb.func(th, ph) * R_earth.to('km')
 
 
     def make_fig(elev=None, azim=None, limit=False):
