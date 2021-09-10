@@ -5,6 +5,7 @@ from functools import partial
 import numpy as np
 from astropy.units.quantity import Quantity
 from astropy.constants import R_earth
+import astropy.units as u
 
 from typing import Callable
 
@@ -18,6 +19,9 @@ class SphericalBoundary(Shape):
 
     kwargs passed to the constructor are forwarded to the callback-function (except for the base-keyword).
 
+    A scale-factor (as a astropy.Quantity) can be provided. By default it is kilometer. This factor is
+    applied to the radius-component returned by the callback-function.
+
     Optionally an upper and/or a lower bound can be specified to define a range around the boundary. In practice
     at least one of them should be defined - trajectory points are rarely exactly on the boundary.
 
@@ -28,12 +32,18 @@ class SphericalBoundary(Shape):
 
     def __init__(self, callback: Callable,
                  lower_bound: Quantity = None,
-                 upper_bound: Quantity = None, **kwargs):
+                 upper_bound: Quantity = None,
+                 scale: Quantity = 1 * u.km,
+                 **kwargs):
         if lower_bound is None and upper_bound is None:
             raise ValueError("At least of one of lower or upper bound has to be specified.")
 
+        if scale is None:
+            raise ValueError("Given scale-factor cannot be None, has to be a astropy.Quantity")
+
         self._lower = lower_bound
         self._upper = upper_bound
+        self._scale = scale
 
         if self._lower is not None and self._upper is not None:
             if self._lower > self._upper:
@@ -44,7 +54,9 @@ class SphericalBoundary(Shape):
         self._cb = partial(callback, **kwargs)
 
     def intersect(self, trajectory: Trajectory):
-        distances = trajectory.r - self._cb(trajectory.lon, trajectory.lat)[0] * R_earth
+        distances = trajectory.r - self._cb(trajectory.lon, trajectory.lat)[0] * self._scale
+
+        print(distances, self._lower, self._upper, trajectory.r)
 
         return (distances >= self._lower if self._lower is not None else True) & \
                (distances <= self._upper if self._upper is not None else True)
@@ -65,12 +77,13 @@ class Sheath(Shape):
                  outer_callback: Callable,
                  inner_margin: Quantity = 0,
                  outer_margin: Quantity = 0,
+                 scale: Quantity = 1 * u.km,
                  **kwargs):
         if inner_margin is None or outer_margin is None or inner_margin < 0 or outer_margin < 0:
             raise ValueError("The margins have to be larger or equal to zero if specified.")
 
-        self.inner_model = SphericalBoundary(inner_callback, -inner_margin, None, **kwargs)
-        self.outer_model = SphericalBoundary(outer_callback, None, outer_margin, **kwargs)
+        self.inner_model = SphericalBoundary(inner_callback, -inner_margin, None, scale, **kwargs)
+        self.outer_model = SphericalBoundary(outer_callback, None, outer_margin, scale, **kwargs)
 
     def intersect(self, trajectory: Trajectory):
         inner_mask = self.inner_model.intersect(trajectory)

@@ -10,7 +10,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['numpy', 'astropy']
+requirements = ['numpy', 'astropy', 'matplotlib>=3.3']
 
 setup_requirements = ['pytest-runner']
 

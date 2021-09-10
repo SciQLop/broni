@@ -19,7 +19,7 @@ class SphereModel:
         assert (kwargs['base'] == 'spherical' or kwargs['base'] == 'cartesian')
 
         if kwargs['base'] == 'spherical':
-            return np.full(theta.shape, self.r.to('km').value) * km, theta, phi
+            return np.full(theta.shape, self.r.to('km').value), theta, phi
         # else:
         #     return self.r * np.sin(theta) * np.cos(phi), \
         #            self.r * np.sin(theta) * np.sin(phi), \
@@ -39,6 +39,10 @@ class TestCallbacks(unittest.TestCase):
     def test_boundary_invalid_ctor_args_upper_bound_greater_than_lower_bound(self):
         with self.assertRaises(ValueError):
             assert SphericalBoundary(SphereModel(1), 0, -1)
+
+    def test_boundary_invalid_ctor_args_scale_cannot_be_none(self):
+        with self.assertRaises(ValueError):
+            assert SphericalBoundary(SphereModel(1), 0, -1, None)
 
     def test_sheath_invalid_ctor_args_margin_inner_none(self):
         with self.assertRaises(ValueError):
@@ -74,12 +78,19 @@ class TestCallbacks(unittest.TestCase):
         ((1, None, 0.5), [[-1, 0, 0], [0, 0, 0], [1, 0, 0], [2, 0, 0]], [True, True, True, False]),
         ((1, -0.5, None), [[-1, 0, 0], [0, 0, 0], [1, 0, 0], [2, 0, 0]], [True, False, True, True]),
         ((1, -10, 10), [[-1, 0, 0], [0, 0, 0], [1, 0, 0], [2, 0, 0]], [True, True, True, True]),
+        ((1, -1, 1, 0.1 * km), [[-1, 0, 0], [0, 0, 0], [1, 0, 0], [2, 0, 0]], [True, True, True, False]),
     )
     @unpack
     def test_boundary_with_sphere_model_intersections(self, model, trajectory, expected):
+        if len(model) == 4:
+            scale = model[3]
+        else:
+            scale = 1 * km
         shape = SphericalBoundary(SphereModel(model[0] * km),
                                   model[1] * km if model[1] is not None else None,
-                                  model[2] * km if model[2] is not None else None)
+                                  model[2] * km if model[2] is not None else None,
+                                  scale
+                                  )
 
         td = np.array(trajectory) * km
 
